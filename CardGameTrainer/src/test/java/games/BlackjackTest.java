@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.InOrder;
 
 import static org.mockito.Mockito.*;
 import participant.House;
@@ -26,12 +27,15 @@ public class BlackjackTest {
 	}
 	
 	@Test
-	public void givenANewPlayBeginsWithSinglePlayer_whenDealingFirstCards_thenThePlayerReceivesTwoCards() {
-		//given // when
+	public void givenANewPlayWithSinglePlayer_whenItsTheBeginingOfTheGame_thenThePlayerMustGiveHisBetThenReceiveTwoCards() {
+		// given // when
 		startANewSinglePlayerGame();
 		
-		//then
-		verify(player, times(2)).receiveCard(anyInt());
+		// then
+		InOrder order = inOrder(player);
+		
+		order.verify(player).decideBet();
+		order.verify(player, times(2)).receiveCard(anyInt());
 	}
 	
 	@Test
