@@ -5,25 +5,29 @@ import java.util.List;
 
 public class Player {
 
-	public List<Integer> getHand() {
-		List<Integer> hand = new ArrayList<Integer>(); 
-		
-		return hand;
-	}
+    public List<Integer> getHand() {
+        List<Integer> hand = new ArrayList<Integer>();
 
-	public void receiveCard(int card) {
-	}
+        return hand;
+    }
 
-	public int decideBet() {
-		return 1;
-	}
+    public void receiveCard(int card) {
+    }
 
-	public void receiveGains(int capture) {
-		
-	}
+    public int decideBet() {
+        return 1;
+    }
 
-	public void loseBet(Integer capture) {
-		
-	}
-	
+    public void receiveGains(int capture) {
+
+    }
+
+    public void loseBet(Integer capture) {
+
+    }
+
+    public boolean wantsANewCard() {
+        return false;
+    }
+
 }
