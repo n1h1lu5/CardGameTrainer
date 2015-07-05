@@ -25,9 +25,15 @@ public class Blackjack {
         giveInitialCardsToPlayer();
     }
 
-    public void askEveryoneToPlay() {
+    public void askPlayerToPlay() {
         while (!hasBusted(calculatePlayerScore()) && player.wantsANewCard()) {
             player.receiveCard(1);
+        }
+    }
+
+    public void askHouseToPlay() {
+        while (!hasBusted(calculateHouseScore()) && house.wantsNewCard()) {
+            house.receiveCard(1);
         }
     }
 

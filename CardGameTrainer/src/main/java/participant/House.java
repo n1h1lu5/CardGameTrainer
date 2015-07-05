@@ -10,4 +10,12 @@ public class House {
         return hand;
     }
 
+    public boolean wantsNewCard() {
+        return false;
+    }
+
+    public void receiveCard(int card) {
+        
+    }
+
 }
