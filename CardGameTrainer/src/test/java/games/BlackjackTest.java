@@ -29,24 +29,25 @@ public class BlackjackTest {
     }
 
     @Test
+    public void givenANewPlayWithSinglePlayer_whenItsTheBeginingOfTheGame_thenThePlayerMustGiveHisBetThenReceiveTwoCards() {
+        // given // when
+        startANewSinglePlayerGame();
+
+        // then
+        InOrder order = inOrder(player);
+
+        order.verify(player).decideBet();
+        order.verify(player, times(2)).receiveCard(anyInt());
+    }
+    
+    @Test
     public void givenASinglePlayerGame_whenThePlayerHasPlayed_thenTheHouseCanAskANewCardUntilItBusts() {
         // given
         Blackjack blackjack = startANewSinglePlayerGame();
 
         // when
         when(house.wantsNewCard()).thenReturn(true);
-        when(house.getHand()).thenAnswer(new Answer<List<Integer>>() {
-            private int numberOfTimeTheHandIsCalculated = 0;
-
-            @Override
-            public List<Integer> answer(InvocationOnMock invocation) throws Throwable {
-                numberOfTimeTheHandIsCalculated++;
-                if (numberOfTimeTheHandIsCalculated < 4)
-                    return createALosingNotBustingHand();
-                return createBustingHand();
-            }
-        });
-
+        when(house.getHand()).thenAnswer(bustAfterTakingNewCards3Times());
         blackjack.askHouseToPlay();
 
         // then
@@ -59,18 +60,7 @@ public class BlackjackTest {
         Blackjack blackjack = startANewSinglePlayerGame();
 
         // when
-        when(house.wantsNewCard()).thenAnswer(new Answer<Boolean>() {
-            private int numberOfTimeTheHandIsCalculated = 0;
-
-            @Override
-            public Boolean answer(InvocationOnMock invocation) throws Throwable {
-                numberOfTimeTheHandIsCalculated++;
-                if (numberOfTimeTheHandIsCalculated < 3)
-                    return true;
-                return false;
-            }
-
-        });
+        when(house.wantsNewCard()).thenAnswer(stopTakingNewCardsAfter2Times());
         when(house.getHand()).thenReturn(createALosingNotBustingHand());
         blackjack.askHouseToPlay();
 
@@ -84,23 +74,14 @@ public class BlackjackTest {
         Blackjack blackjack = startANewSinglePlayerGame();
 
         // when
-        when(player.wantsANewCard()).then(new Answer<Boolean>() {
-            private int numberOfTimeTheHandIsCalculated = 0;
-
-            @Override
-            public Boolean answer(InvocationOnMock invocation) throws Throwable {
-                numberOfTimeTheHandIsCalculated++;
-                if (numberOfTimeTheHandIsCalculated < 3)
-                    return true;
-                return false;
-            }
-        });
+        when(player.wantsANewCard()).thenAnswer(stopTakingNewCardsAfter2Times());
         when(player.getHand()).thenReturn(createALosingNotBustingHand());
         blackjack.askPlayerToPlay();
 
         // then
         verify(player, times(4)).receiveCard(anyInt());
     }
+
 
     @Test
     public void givenThePlayerHasReceivedHisFirstTwoCards_whenItsThePlayerTurn_thenHeCanAskForANewCardUntilHeHasBusted() {
@@ -109,33 +90,11 @@ public class BlackjackTest {
 
         // when
         when(player.wantsANewCard()).thenReturn(true);
-        when(player.getHand()).thenAnswer(new Answer<List<Integer>>() {
-            private int numberOfTimeTheHandIsCaculated = 0;
-
-            public List<Integer> answer(InvocationOnMock invocation) {
-                numberOfTimeTheHandIsCaculated++;
-                if (numberOfTimeTheHandIsCaculated < 4)
-                    return createALosingNotBustingHand();
-                return createBustingHand();
-            }
-        });
-
+        when(player.getHand()).thenAnswer(bustAfterTakingNewCards3Times());
         blackjack.askPlayerToPlay();
 
         // then
         verify(player, times(5)).receiveCard(anyInt());
-    }
-
-    @Test
-    public void givenANewPlayWithSinglePlayer_whenItsTheBeginingOfTheGame_thenThePlayerMustGiveHisBetThenReceiveTwoCards() {
-        // given //when
-        startANewSinglePlayerGame();
-
-        // then
-        InOrder order = inOrder(player);
-
-        order.verify(player).decideBet();
-        order.verify(player, times(2)).receiveCard(anyInt());
     }
 
     @Test
@@ -313,5 +272,34 @@ public class BlackjackTest {
         when(player.decideBet()).thenReturn(PLAYER_BET);
         blackjack.startNewPlay();
         return blackjack;
+    }
+    
+    private Answer<Boolean> stopTakingNewCardsAfter2Times() {
+        return new Answer<Boolean>() {
+            private int numberOfTimeTheHandIsCalculated = 0;
+
+            @Override
+            public Boolean answer(InvocationOnMock invocation) throws Throwable {
+                numberOfTimeTheHandIsCalculated++;
+                if (numberOfTimeTheHandIsCalculated < 3)
+                    return true;
+                return false;
+            }
+        };
+    }
+
+    private Answer<List<Integer>> bustAfterTakingNewCards3Times() {
+        return new Answer<List<Integer>>() {
+            private int numberOfTimeTheHandIsCalculated = 0;
+
+            @Override
+            public List<Integer> answer(InvocationOnMock invocation) throws Throwable {
+                numberOfTimeTheHandIsCalculated++;
+                if (numberOfTimeTheHandIsCalculated < 4)
+                    return createALosingNotBustingHand();
+                return createBustingHand();
+            }
+        };
+
     }
 }
