@@ -23,6 +23,7 @@ public class Blackjack {
     public void startNewPlay() {
         playerBet = player.decideBet();
         giveInitialCardsToPlayer();
+        giveInitialCardsToHouse();
     }
 
     public void askPlayerToPlay() {
@@ -58,6 +59,11 @@ public class Blackjack {
     private void giveInitialCardsToPlayer() {
         player.receiveCard(1);
         player.receiveCard(1);
+    }
+
+    private void giveInitialCardsToHouse() {
+        house.receiveCard(1);
+        house.receiveCard(1);
     }
 
     private boolean houseBeatsPlayer(int playerScore, int houseScore) {

@@ -39,7 +39,19 @@ public class BlackjackTest {
         order.verify(player).decideBet();
         order.verify(player, times(2)).receiveCard(anyInt());
     }
-    
+
+    @Test
+    public void givenANewPlayWithSinglePlayer_whenItsTheBeginingOfTheGame_thenThePlayerReceiveHisCardsFirstAndTheHouseReceiveItsCardsLast() {
+        // given // when
+        startANewSinglePlayerGame();
+        
+        // then
+        InOrder order = inOrder(player, house);
+        
+        order.verify(player, times(2)).receiveCard(anyInt());
+        order.verify(house, times(2)).receiveCard(anyInt());
+    }
+
     @Test
     public void givenASinglePlayerGame_whenThePlayerHasPlayed_thenTheHouseCanAskANewCardUntilItBusts() {
         // given
@@ -51,7 +63,7 @@ public class BlackjackTest {
         blackjack.askHouseToPlay();
 
         // then
-        verify(house, times(3)).receiveCard(anyInt());
+        verify(house, times(5)).receiveCard(anyInt());
     }
 
     @Test
@@ -65,7 +77,7 @@ public class BlackjackTest {
         blackjack.askHouseToPlay();
 
         // then
-        verify(house, times(2)).receiveCard(anyInt());
+        verify(house, times(4)).receiveCard(anyInt());
     }
 
     @Test
@@ -81,7 +93,6 @@ public class BlackjackTest {
         // then
         verify(player, times(4)).receiveCard(anyInt());
     }
-
 
     @Test
     public void givenThePlayerHasReceivedHisFirstTwoCards_whenItsThePlayerTurn_thenHeCanAskForANewCardUntilHeHasBusted() {
@@ -273,7 +284,7 @@ public class BlackjackTest {
         blackjack.startNewPlay();
         return blackjack;
     }
-    
+
     private Answer<Boolean> stopTakingNewCardsAfter2Times() {
         return new Answer<Boolean>() {
             private int numberOfTimeTheHandIsCalculated = 0;
@@ -300,6 +311,5 @@ public class BlackjackTest {
                 return createBustingHand();
             }
         };
-
     }
 }
