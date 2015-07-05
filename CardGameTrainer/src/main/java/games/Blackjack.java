@@ -1,7 +1,5 @@
 package games;
 
-import java.util.List;
-
 import participant.House;
 import participant.Player;
 
@@ -10,16 +8,19 @@ public class Blackjack {
     public static final float BLACKJACK_PAY_FACTOR = 1.5f;
     public static final int SCORE_BUST_LIMIT = 21;
 
+    private BlackjackScoreCalculator scoreCalculator;
+    
     private House house;
 
     private Player player;
     private int playerBet;
 
     public Blackjack(House house, Player player) {
+        this.scoreCalculator = new BlackjackScoreCalculator();
         this.player = player;
         this.house = house;
     }
-
+    
     public void startNewPlay() {
         playerBet = player.decideBet();
         giveInitialCardsToPlayer();
@@ -75,18 +76,11 @@ public class Blackjack {
     }
 
     private int calculateHouseScore() {
-        return calculateScore(house.getHand());
+        return scoreCalculator.calculateScore(house.getHand());
     }
 
     private int calculatePlayerScore() {
-        return calculateScore(player.getHand());
-    }
-
-    private int calculateScore(List<Integer> hand) {
-        int score = 0;
-        for (int card : hand)
-            score += card;
-        return score;
+        return scoreCalculator.calculateScore(player.getHand());
     }
 
     private boolean hasBusted(int score) {
@@ -95,5 +89,12 @@ public class Blackjack {
 
     private boolean hasBlackjack(int score) {
         return score == SCORE_BUST_LIMIT && player.getHand().size() == BLACKJACK_HAND_SIZE;
+    }
+    
+    // For test purpose only
+    protected Blackjack(House house, Player player, BlackjackScoreCalculator scoreCalculator) {
+        this.scoreCalculator = scoreCalculator;
+        this.player = player;
+        this.house = house;
     }
 }

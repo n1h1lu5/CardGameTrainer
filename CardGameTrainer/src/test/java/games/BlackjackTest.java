@@ -16,14 +16,15 @@ import participant.House;
 import participant.Player;
 
 public class BlackjackTest {
-
     private static final int PLAYER_BET = 10;
 
+    private BlackjackScoreCalculator scoreCalculator;
     private Player player;
     private House house;
 
     @Before
     public void setup() {
+        scoreCalculator = mock(BlackjackScoreCalculator.class);
         player = mock(Player.class);
         house = mock(House.class);
     }
@@ -44,10 +45,10 @@ public class BlackjackTest {
     public void givenANewPlayWithSinglePlayer_whenItsTheBeginingOfTheGame_thenThePlayerReceiveHisCardsFirstAndTheHouseReceiveItsCardsLast() {
         // given // when
         startANewSinglePlayerGame();
-        
+
         // then
         InOrder order = inOrder(player, house);
-        
+
         order.verify(player, times(2)).receiveCard(anyInt());
         order.verify(house, times(2)).receiveCard(anyInt());
     }
@@ -59,7 +60,8 @@ public class BlackjackTest {
 
         // when
         when(house.wantsNewCard()).thenReturn(true);
-        when(house.getHand()).thenAnswer(bustAfterTakingNewCards3Times());
+        when(scoreCalculator.calculateScore(anyListOf(Integer.class))).thenAnswer(bustAfterTakingNewCards3Times());
+
         blackjack.askHouseToPlay();
 
         // then
@@ -74,6 +76,7 @@ public class BlackjackTest {
         // when
         when(house.wantsNewCard()).thenAnswer(stopTakingNewCardsAfter2Times());
         when(house.getHand()).thenReturn(createALosingNotBustingHand());
+
         blackjack.askHouseToPlay();
 
         // then
@@ -88,6 +91,7 @@ public class BlackjackTest {
         // when
         when(player.wantsANewCard()).thenAnswer(stopTakingNewCardsAfter2Times());
         when(player.getHand()).thenReturn(createALosingNotBustingHand());
+
         blackjack.askPlayerToPlay();
 
         // then
@@ -101,7 +105,8 @@ public class BlackjackTest {
 
         // when
         when(player.wantsANewCard()).thenReturn(true);
-        when(player.getHand()).thenAnswer(bustAfterTakingNewCards3Times());
+        when(scoreCalculator.calculateScore(anyListOf(Integer.class))).thenAnswer(bustAfterTakingNewCards3Times());
+
         blackjack.askPlayerToPlay();
 
         // then
@@ -116,6 +121,7 @@ public class BlackjackTest {
         // when
         List<Integer> bustingHand = createBustingHand();
         when(player.getHand()).thenReturn(bustingHand);
+        when(scoreCalculator.calculateScore(bustingHand)).thenReturn(22);
 
         // then
         blackjack.computeOutcome();
@@ -134,6 +140,7 @@ public class BlackjackTest {
         // when
         List<Integer> blackjackHand = createBlackjackHand();
         when(player.getHand()).thenReturn(blackjackHand);
+        when(scoreCalculator.calculateScore(blackjackHand)).thenReturn(21);
 
         // then
         blackjack.computeOutcome();
@@ -155,6 +162,8 @@ public class BlackjackTest {
 
         when(house.getHand()).thenReturn(losingHand);
         when(player.getHand()).thenReturn(winningHand);
+        when(scoreCalculator.calculateScore(losingHand)).thenReturn(10);
+        when(scoreCalculator.calculateScore(winningHand)).thenReturn(15);
 
         blackjack.computeOutcome();
 
@@ -176,6 +185,8 @@ public class BlackjackTest {
 
         when(house.getHand()).thenReturn(losingHand);
         when(player.getHand()).thenReturn(winningHand);
+        when(scoreCalculator.calculateScore(losingHand)).thenReturn(15);
+        when(scoreCalculator.calculateScore(winningHand)).thenReturn(20);
 
         blackjack.computeOutcome();
 
@@ -197,6 +208,8 @@ public class BlackjackTest {
 
         when(house.getHand()).thenReturn(winningHand);
         when(player.getHand()).thenReturn(losingHand);
+        when(scoreCalculator.calculateScore(winningHand)).thenReturn(15);
+        when(scoreCalculator.calculateScore(losingHand)).thenReturn(10);
 
         blackjack.computeOutcome();
 
@@ -217,6 +230,7 @@ public class BlackjackTest {
 
         when(house.getHand()).thenReturn(aHand);
         when(player.getHand()).thenReturn(aHand);
+        when(scoreCalculator.calculateScore(aHand)).thenReturn(10);
 
         blackjack.computeOutcome();
 
@@ -238,6 +252,8 @@ public class BlackjackTest {
 
         when(house.getHand()).thenReturn(aBustingHand);
         when(player.getHand()).thenReturn(aNotBustingHand);
+        when(scoreCalculator.calculateScore(aBustingHand)).thenReturn(22);
+        when(scoreCalculator.calculateScore(aNotBustingHand)).thenReturn(10);
 
         blackjack.computeOutcome();
 
@@ -279,7 +295,7 @@ public class BlackjackTest {
     }
 
     private Blackjack startANewSinglePlayerGame() {
-        Blackjack blackjack = new Blackjack(house, player);
+        Blackjack blackjack = new Blackjack(house, player, scoreCalculator);
         when(player.decideBet()).thenReturn(PLAYER_BET);
         blackjack.startNewPlay();
         return blackjack;
@@ -299,16 +315,16 @@ public class BlackjackTest {
         };
     }
 
-    private Answer<List<Integer>> bustAfterTakingNewCards3Times() {
-        return new Answer<List<Integer>>() {
+    private Answer<Integer> bustAfterTakingNewCards3Times() {
+        return new Answer<Integer>() {
             private int numberOfTimeTheHandIsCalculated = 0;
 
             @Override
-            public List<Integer> answer(InvocationOnMock invocation) throws Throwable {
+            public Integer answer(InvocationOnMock invocation) throws Throwable {
                 numberOfTimeTheHandIsCalculated++;
                 if (numberOfTimeTheHandIsCalculated < 4)
-                    return createALosingNotBustingHand();
-                return createBustingHand();
+                    return 10;
+                return 22;
             }
         };
     }
