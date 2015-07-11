@@ -11,12 +11,14 @@ import org.mockito.InOrder;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import decks.Card;
 import static org.mockito.Mockito.*;
 import participant.House;
 import participant.Player;
 
 public class BlackjackTest {
     private static final int PLAYER_BET = 10;
+    private static final float BLACKJACK_PAY_FACTOR = 1.5f;
 
     private BlackjackScoreCalculator scoreCalculator;
     private Player player;
@@ -60,7 +62,7 @@ public class BlackjackTest {
 
         // when
         when(house.wantsNewCard()).thenReturn(true);
-        when(scoreCalculator.calculateScore(anyListOf(Integer.class))).thenAnswer(bustAfterTakingNewCards3Times());
+        when(scoreCalculator.calculateScore(anyListOf(Card.class))).thenAnswer(bustAfterTakingNewCards3Times());
 
         blackjack.askHouseToPlay();
 
@@ -105,7 +107,7 @@ public class BlackjackTest {
 
         // when
         when(player.wantsANewCard()).thenReturn(true);
-        when(scoreCalculator.calculateScore(anyListOf(Integer.class))).thenAnswer(bustAfterTakingNewCards3Times());
+        when(scoreCalculator.calculateScore(anyListOf(Card.class))).thenAnswer(bustAfterTakingNewCards3Times());
 
         blackjack.askPlayerToPlay();
 
@@ -119,7 +121,7 @@ public class BlackjackTest {
         Blackjack blackjack = startANewSinglePlayerGame();
 
         // when
-        List<Integer> bustingHand = createBustingHand();
+        List<Card> bustingHand = createBustingHand();
         when(player.getHand()).thenReturn(bustingHand);
         when(scoreCalculator.calculateScore(bustingHand)).thenReturn(22);
 
@@ -138,7 +140,7 @@ public class BlackjackTest {
         Blackjack blackjack = startANewSinglePlayerGame();
 
         // when
-        List<Integer> blackjackHand = createBlackjackHand();
+        List<Card> blackjackHand = createBlackjackHand();
         when(player.getHand()).thenReturn(blackjackHand);
         when(scoreCalculator.calculateScore(blackjackHand)).thenReturn(21);
 
@@ -148,7 +150,7 @@ public class BlackjackTest {
         ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
 
         verify(player).receiveGains(argument.capture());
-        Assert.assertEquals((int) (PLAYER_BET * Blackjack.BLACKJACK_PAY_FACTOR), argument.getValue().intValue());
+        Assert.assertEquals((int) (PLAYER_BET * BLACKJACK_PAY_FACTOR), argument.getValue().intValue());
     }
 
     @Test
@@ -157,8 +159,8 @@ public class BlackjackTest {
         Blackjack blackjack = startANewSinglePlayerGame();
 
         // when
-        List<Integer> losingHand = createALosingNotBustingHand();
-        List<Integer> winningHand = createAWinningNotBustingHand();
+        List<Card> losingHand = createALosingNotBustingHand();
+        List<Card> winningHand = createAWinningNotBustingHand();
 
         when(house.getHand()).thenReturn(losingHand);
         when(player.getHand()).thenReturn(winningHand);
@@ -180,8 +182,8 @@ public class BlackjackTest {
         Blackjack blackjack = startANewSinglePlayerGame();
 
         // when
-        List<Integer> losingHand = createALosingNotBustingHand();
-        List<Integer> winningHand = createAWinningNotBustingHand();
+        List<Card> losingHand = createALosingNotBustingHand();
+        List<Card> winningHand = createAWinningNotBustingHand();
 
         when(house.getHand()).thenReturn(losingHand);
         when(player.getHand()).thenReturn(winningHand);
@@ -203,8 +205,8 @@ public class BlackjackTest {
         Blackjack blackjack = startANewSinglePlayerGame();
 
         // when
-        List<Integer> losingHand = createALosingNotBustingHand();
-        List<Integer> winningHand = createAWinningNotBustingHand();
+        List<Card> losingHand = createALosingNotBustingHand();
+        List<Card> winningHand = createAWinningNotBustingHand();
 
         when(house.getHand()).thenReturn(winningHand);
         when(player.getHand()).thenReturn(losingHand);
@@ -226,7 +228,7 @@ public class BlackjackTest {
         Blackjack blackjack = startANewSinglePlayerGame();
 
         // when
-        List<Integer> aHand = createAWinningNotBustingHand();
+        List<Card> aHand = createAWinningNotBustingHand();
 
         when(house.getHand()).thenReturn(aHand);
         when(player.getHand()).thenReturn(aHand);
@@ -247,8 +249,8 @@ public class BlackjackTest {
         Blackjack blackjack = startANewSinglePlayerGame();
 
         // when
-        List<Integer> aBustingHand = createBustingHand();
-        List<Integer> aNotBustingHand = createAWinningNotBustingHand();
+        List<Card> aBustingHand = createBustingHand();
+        List<Card> aNotBustingHand = createAWinningNotBustingHand();
 
         when(house.getHand()).thenReturn(aBustingHand);
         when(player.getHand()).thenReturn(aNotBustingHand);
@@ -264,33 +266,33 @@ public class BlackjackTest {
         Assert.assertEquals(PLAYER_BET, argument.getValue().intValue());
     }
 
-    private List<Integer> createBustingHand() {
-        List<Integer> bustingHand = new ArrayList<Integer>();
-        bustingHand.add(11);
-        bustingHand.add(9);
-        bustingHand.add(2);
+    private List<Card> createBustingHand() {
+        List<Card> bustingHand = new ArrayList<Card>();
+        bustingHand.add(new Card(10, Card.Type.CLOVER));
+        bustingHand.add(new Card(10, Card.Type.CLOVER));
+        bustingHand.add(new Card(10, Card.Type.CLOVER));
         return bustingHand;
     }
 
-    private List<Integer> createAWinningNotBustingHand() {
-        List<Integer> aNotBustingHand = new ArrayList<Integer>();
-        aNotBustingHand.add(5);
-        aNotBustingHand.add(5);
+    private List<Card> createAWinningNotBustingHand() {
+        List<Card> aNotBustingHand = new ArrayList<Card>();
+        aNotBustingHand.add(new Card(5, Card.Type.CLOVER));
+        aNotBustingHand.add(new Card(5, Card.Type.CLOVER));
         return aNotBustingHand;
     }
 
-    private List<Integer> createALosingNotBustingHand() {
-        List<Integer> aNotBustingHand = new ArrayList<Integer>();
-        aNotBustingHand.add(1);
-        aNotBustingHand.add(1);
+    private List<Card> createALosingNotBustingHand() {
+        List<Card> aNotBustingHand = new ArrayList<Card>();
+        aNotBustingHand.add(new Card(2, Card.Type.CLOVER));
+        aNotBustingHand.add(new Card(2, Card.Type.CLOVER));
 
         return aNotBustingHand;
     }
 
-    private List<Integer> createBlackjackHand() {
-        List<Integer> blackjackHand = new ArrayList<Integer>();
-        blackjackHand.add(11);
-        blackjackHand.add(10);
+    private List<Card> createBlackjackHand() {
+        List<Card> blackjackHand = new ArrayList<Card>();
+        blackjackHand.add(new Card(1, Card.Type.CLOVER));
+        blackjackHand.add(new Card(10, Card.Type.CLOVER));
         return blackjackHand;
     }
 

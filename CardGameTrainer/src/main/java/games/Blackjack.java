@@ -5,11 +5,11 @@ import participant.Player;
 
 public class Blackjack {
     private static final int BLACKJACK_HAND_SIZE = 2;
-    public static final float BLACKJACK_PAY_FACTOR = 1.5f;
-    public static final int SCORE_BUST_LIMIT = 21;
+    private static final float BLACKJACK_PAY_FACTOR = 1.5f;
+    private static final int SCORE_BUST_LIMIT = 21;
 
     private BlackjackScoreCalculator scoreCalculator;
-    
+
     private House house;
 
     private Player player;
@@ -20,7 +20,7 @@ public class Blackjack {
         this.player = player;
         this.house = house;
     }
-    
+
     public void startNewPlay() {
         playerBet = player.decideBet();
         giveInitialCardsToPlayer();
@@ -90,7 +90,7 @@ public class Blackjack {
     private boolean hasBlackjack(int score) {
         return score == SCORE_BUST_LIMIT && player.getHand().size() == BLACKJACK_HAND_SIZE;
     }
-    
+
     // For test purpose only
     protected Blackjack(House house, Player player, BlackjackScoreCalculator scoreCalculator) {
         this.scoreCalculator = scoreCalculator;

@@ -3,10 +3,12 @@ package participant;
 import java.util.ArrayList;
 import java.util.List;
 
+import decks.Card;
+
 public class House {
 
-    public List<Integer> getHand() {
-        List<Integer> hand = new ArrayList<Integer>();
+    public List<Card> getHand() {
+        List<Card> hand = new ArrayList<Card>();
         return hand;
     }
 
