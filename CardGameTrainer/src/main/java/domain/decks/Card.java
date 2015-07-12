@@ -1,6 +1,6 @@
 package domain.decks;
 
-public class Card implements Comparable<Card> {
+public class Card {
     public enum Type {
         HEART, DIAMOND, CLOVER, PIKE
     };
@@ -12,15 +12,4 @@ public class Card implements Comparable<Card> {
         this.number = number;
         this.type = type;
     }
-
-    @Override
-    public int compareTo(Card compared) {
-        if (this.number > compared.number) {
-            return 1;
-        } else if (this.number < compared.number) {
-            return -1;
-        }
-        return 0;
-    }
-
 }
