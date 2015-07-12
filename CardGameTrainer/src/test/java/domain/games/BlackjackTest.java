@@ -1,4 +1,4 @@
-package games;
+package domain.games;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -7,11 +7,13 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import static org.mockito.Mockito.*;
 
-import decks.Card;
-import participant.House;
-import participant.Player;
+import static org.mockito.Mockito.*;
+import domain.decks.Card;
+import domain.games.Blackjack;
+import domain.games.BlackjackGameState;
+import domain.participant.House;
+import domain.participant.Player;
 
 public class BlackjackTest {
     private static final int PLAYER_BET = 10;

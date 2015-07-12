@@ -1,9 +1,9 @@
-package participant;
+package domain.participant;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import decks.Card;
+import domain.decks.Card;
 
 public class Player {
 

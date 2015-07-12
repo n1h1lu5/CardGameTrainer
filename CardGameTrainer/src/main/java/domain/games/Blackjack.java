@@ -1,7 +1,7 @@
-package games;
+package domain.games;
 
-import participant.House;
-import participant.Player;
+import domain.participant.House;
+import domain.participant.Player;
 
 public class Blackjack {
     private static final float BLACKJACK_PAY_FACTOR = 1.5f;

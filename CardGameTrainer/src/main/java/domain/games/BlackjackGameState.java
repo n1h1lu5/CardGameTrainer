@@ -1,8 +1,8 @@
-package games;
+package domain.games;
 
 import java.util.List;
 
-import decks.Card;
+import domain.decks.Card;
 
 public class BlackjackGameState {
     private static final int SCORE_BUST_LIMIT = 21;

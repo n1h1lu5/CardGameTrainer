@@ -1,4 +1,4 @@
-package decks;
+package domain.decks;
 
 public class Card implements Comparable<Card> {
     public enum Type {

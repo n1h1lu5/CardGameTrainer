@@ -1,4 +1,4 @@
-package games;
+package domain.games;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import decks.Card;
+import domain.decks.Card;
+import domain.games.BlackjackGameState;
+import domain.games.BlackjackScoreCalculator;
 import static org.mockito.Mockito.*;
 
 public class BlackjackGameStateTest {

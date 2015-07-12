@@ -1,4 +1,4 @@
-package decks;
+package domain.decks;
 
 public class BlackjackCardDeck {
 

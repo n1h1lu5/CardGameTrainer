@@ -1,9 +1,9 @@
-package games;
+package domain.games;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import decks.Card;
+import domain.decks.Card;
 
 public class BlackjackScoreCalculator {
     private static final int SCORE_BUST_LIMIT = 21;
