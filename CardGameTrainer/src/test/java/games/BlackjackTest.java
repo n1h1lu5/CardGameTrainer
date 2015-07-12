@@ -1,8 +1,5 @@
 package games;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,9 +7,9 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InOrder;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
+import static org.mockito.Mockito.*;
 
 import decks.Card;
-import static org.mockito.Mockito.*;
 import participant.House;
 import participant.Player;
 
@@ -20,15 +17,20 @@ public class BlackjackTest {
     private static final int PLAYER_BET = 10;
     private static final float BLACKJACK_PAY_FACTOR = 1.5f;
 
-    private BlackjackScoreCalculator scoreCalculator;
+    private BlackjackGameState gameState;
     private Player player;
     private House house;
 
     @Before
     public void setup() {
-        scoreCalculator = mock(BlackjackScoreCalculator.class);
+        gameState = mock(BlackjackGameState.class);
         player = mock(Player.class);
         house = mock(House.class);
+    }
+
+    @Test
+    public void canCreateABlackjackInstence() {
+        new Blackjack(house, player);
     }
 
     @Test
@@ -62,7 +64,7 @@ public class BlackjackTest {
 
         // when
         when(house.wantsNewCard()).thenReturn(true);
-        when(scoreCalculator.calculateScore(anyListOf(Card.class))).thenAnswer(bustAfterTakingNewCards3Times());
+        when(gameState.hasBusted(anyListOf(Card.class))).thenAnswer(bustAfterTakingNewCards3Times());
 
         blackjack.askHouseToPlay();
 
@@ -77,7 +79,6 @@ public class BlackjackTest {
 
         // when
         when(house.wantsNewCard()).thenAnswer(stopTakingNewCardsAfter2Times());
-        when(house.getHand()).thenReturn(createALosingNotBustingHand());
 
         blackjack.askHouseToPlay();
 
@@ -92,7 +93,6 @@ public class BlackjackTest {
 
         // when
         when(player.wantsANewCard()).thenAnswer(stopTakingNewCardsAfter2Times());
-        when(player.getHand()).thenReturn(createALosingNotBustingHand());
 
         blackjack.askPlayerToPlay();
 
@@ -107,7 +107,7 @@ public class BlackjackTest {
 
         // when
         when(player.wantsANewCard()).thenReturn(true);
-        when(scoreCalculator.calculateScore(anyListOf(Card.class))).thenAnswer(bustAfterTakingNewCards3Times());
+        when(gameState.hasBusted(anyListOf(Card.class))).thenAnswer(bustAfterTakingNewCards3Times());
 
         blackjack.askPlayerToPlay();
 
@@ -121,9 +121,7 @@ public class BlackjackTest {
         Blackjack blackjack = startANewSinglePlayerGame();
 
         // when
-        List<Card> bustingHand = createBustingHand();
-        when(player.getHand()).thenReturn(bustingHand);
-        when(scoreCalculator.calculateScore(bustingHand)).thenReturn(22);
+        when(gameState.hasBusted(anyListOf(Card.class))).thenReturn(true);
 
         // then
         blackjack.computeOutcome();
@@ -140,9 +138,7 @@ public class BlackjackTest {
         Blackjack blackjack = startANewSinglePlayerGame();
 
         // when
-        List<Card> blackjackHand = createBlackjackHand();
-        when(player.getHand()).thenReturn(blackjackHand);
-        when(scoreCalculator.calculateScore(blackjackHand)).thenReturn(21);
+        when(gameState.hasBlackjack(anyListOf(Card.class))).thenReturn(true);
 
         // then
         blackjack.computeOutcome();
@@ -159,36 +155,7 @@ public class BlackjackTest {
         Blackjack blackjack = startANewSinglePlayerGame();
 
         // when
-        List<Card> losingHand = createALosingNotBustingHand();
-        List<Card> winningHand = createAWinningNotBustingHand();
-
-        when(house.getHand()).thenReturn(losingHand);
-        when(player.getHand()).thenReturn(winningHand);
-        when(scoreCalculator.calculateScore(losingHand)).thenReturn(10);
-        when(scoreCalculator.calculateScore(winningHand)).thenReturn(15);
-
-        blackjack.computeOutcome();
-
-        // then
-        ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
-        verify(player).receiveGains(argument.capture());
-
-        Assert.assertEquals(PLAYER_BET, argument.getValue().intValue());
-    }
-
-    @Test
-    public void givenAPlayerHas21ButNotABlackjack_whenTheGameIsFinishedAndTheHouseLoses_thenThePlayerWinsHisBet() {
-        // given
-        Blackjack blackjack = startANewSinglePlayerGame();
-
-        // when
-        List<Card> losingHand = createALosingNotBustingHand();
-        List<Card> winningHand = createAWinningNotBustingHand();
-
-        when(house.getHand()).thenReturn(losingHand);
-        when(player.getHand()).thenReturn(winningHand);
-        when(scoreCalculator.calculateScore(losingHand)).thenReturn(15);
-        when(scoreCalculator.calculateScore(winningHand)).thenReturn(20);
+        when(gameState.playerBeatsHouse(anyListOf(Card.class), anyListOf(Card.class))).thenReturn(true);
 
         blackjack.computeOutcome();
 
@@ -205,13 +172,7 @@ public class BlackjackTest {
         Blackjack blackjack = startANewSinglePlayerGame();
 
         // when
-        List<Card> losingHand = createALosingNotBustingHand();
-        List<Card> winningHand = createAWinningNotBustingHand();
-
-        when(house.getHand()).thenReturn(winningHand);
-        when(player.getHand()).thenReturn(losingHand);
-        when(scoreCalculator.calculateScore(winningHand)).thenReturn(15);
-        when(scoreCalculator.calculateScore(losingHand)).thenReturn(10);
+        when(gameState.playerBeatsHouse(anyListOf(Card.class), anyListOf(Card.class))).thenReturn(false);
 
         blackjack.computeOutcome();
 
@@ -228,12 +189,7 @@ public class BlackjackTest {
         Blackjack blackjack = startANewSinglePlayerGame();
 
         // when
-        List<Card> aHand = createAWinningNotBustingHand();
-
-        when(house.getHand()).thenReturn(aHand);
-        when(player.getHand()).thenReturn(aHand);
-        when(scoreCalculator.calculateScore(aHand)).thenReturn(10);
-
+        when(gameState.playerAndHouseAreEven(anyListOf(Card.class), anyListOf(Card.class))).thenReturn(true);
         blackjack.computeOutcome();
 
         // then
@@ -243,61 +199,8 @@ public class BlackjackTest {
         Assert.assertEquals(0, argument.getValue().intValue());
     }
 
-    @Test
-    public void givenASinglePlayerGame_whenTheHouseBustAndPlayerHasNotBusted_thenThePlayerWinsHisBet() {
-        // given
-        Blackjack blackjack = startANewSinglePlayerGame();
-
-        // when
-        List<Card> aBustingHand = createBustingHand();
-        List<Card> aNotBustingHand = createAWinningNotBustingHand();
-
-        when(house.getHand()).thenReturn(aBustingHand);
-        when(player.getHand()).thenReturn(aNotBustingHand);
-        when(scoreCalculator.calculateScore(aBustingHand)).thenReturn(22);
-        when(scoreCalculator.calculateScore(aNotBustingHand)).thenReturn(10);
-
-        blackjack.computeOutcome();
-
-        // then
-        ArgumentCaptor<Integer> argument = ArgumentCaptor.forClass(Integer.class);
-        verify(player).receiveGains(argument.capture());
-
-        Assert.assertEquals(PLAYER_BET, argument.getValue().intValue());
-    }
-
-    private List<Card> createBustingHand() {
-        List<Card> bustingHand = new ArrayList<Card>();
-        bustingHand.add(new Card(10, Card.Type.CLOVER));
-        bustingHand.add(new Card(10, Card.Type.CLOVER));
-        bustingHand.add(new Card(10, Card.Type.CLOVER));
-        return bustingHand;
-    }
-
-    private List<Card> createAWinningNotBustingHand() {
-        List<Card> aNotBustingHand = new ArrayList<Card>();
-        aNotBustingHand.add(new Card(5, Card.Type.CLOVER));
-        aNotBustingHand.add(new Card(5, Card.Type.CLOVER));
-        return aNotBustingHand;
-    }
-
-    private List<Card> createALosingNotBustingHand() {
-        List<Card> aNotBustingHand = new ArrayList<Card>();
-        aNotBustingHand.add(new Card(2, Card.Type.CLOVER));
-        aNotBustingHand.add(new Card(2, Card.Type.CLOVER));
-
-        return aNotBustingHand;
-    }
-
-    private List<Card> createBlackjackHand() {
-        List<Card> blackjackHand = new ArrayList<Card>();
-        blackjackHand.add(new Card(1, Card.Type.CLOVER));
-        blackjackHand.add(new Card(10, Card.Type.CLOVER));
-        return blackjackHand;
-    }
-
     private Blackjack startANewSinglePlayerGame() {
-        Blackjack blackjack = new Blackjack(house, player, scoreCalculator);
+        Blackjack blackjack = new Blackjack(house, player, gameState);
         when(player.decideBet()).thenReturn(PLAYER_BET);
         blackjack.startNewPlay();
         return blackjack;
@@ -317,16 +220,17 @@ public class BlackjackTest {
         };
     }
 
-    private Answer<Integer> bustAfterTakingNewCards3Times() {
-        return new Answer<Integer>() {
+    private Answer<Boolean> bustAfterTakingNewCards3Times() {
+        return new Answer<Boolean>() {
             private int numberOfTimeTheHandIsCalculated = 0;
 
             @Override
-            public Integer answer(InvocationOnMock invocation) throws Throwable {
+            public Boolean answer(InvocationOnMock invocation) throws Throwable {
                 numberOfTimeTheHandIsCalculated++;
                 if (numberOfTimeTheHandIsCalculated < 4)
-                    return 10;
-                return 22;
+                    return false;
+                else
+                    return true;
             }
         };
     }

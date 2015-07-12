@@ -11,17 +11,17 @@ public class BlackjackScoreCalculator {
     public int calculateScore(List<Card> hand) {
         int score = 0;
         List<Card> aces = transfertAcesFromHandToAceList(hand);
-
+        
         for (Card card : hand)
             score += card.number;
-
+        
         if (aces.size() != 0) {
             score += calculateAcesScore(aces, score);
         }
-
+        
         return score;
     }
-
+    
     private int calculateAcesScore(List<Card> aces, final int score) {
         int acesAllOnesScore = calculateAllAcesAsOnes(aces);
         int acesAllOnesButOneScore = calculateAcesAsOnesButOne(aces);
