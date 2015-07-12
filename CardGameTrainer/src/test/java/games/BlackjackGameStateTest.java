@@ -11,6 +11,11 @@ import decks.Card;
 import static org.mockito.Mockito.*;
 
 public class BlackjackGameStateTest {
+    private static final int MAXIMUM_VALUE_BEFORE_BUST = 21;
+    private static final int A_BUSTING_SCORE = 30;
+    private static final int A_WINNING_SCORE = 20;
+    private static final int A_LOSING_SCORE = 4;
+
     private BlackjackGameState gameState;
 
     private BlackjackScoreCalculator scoreCalculator;
@@ -31,7 +36,7 @@ public class BlackjackGameStateTest {
         // given
         List<Card> blackjackHand = createBlackjackHand();
 
-        when(scoreCalculator.calculateScore(blackjackHand)).thenReturn(21);
+        when(scoreCalculator.calculateScore(blackjackHand)).thenReturn(MAXIMUM_VALUE_BEFORE_BUST);
 
         // then
         Assert.assertTrue(gameState.hasBlackjack(blackjackHand));
@@ -45,7 +50,7 @@ public class BlackjackGameStateTest {
         a21Hand.add(new Card(1, Card.Type.CLOVER));
         a21Hand.add(new Card(9, Card.Type.CLOVER));
 
-        when(scoreCalculator.calculateScore(a21Hand)).thenReturn(21);
+        when(scoreCalculator.calculateScore(a21Hand)).thenReturn(MAXIMUM_VALUE_BEFORE_BUST);
 
         // then
         Assert.assertFalse(gameState.hasBlackjack(a21Hand));
@@ -58,7 +63,7 @@ public class BlackjackGameStateTest {
         notA21Hand.add(new Card(1, Card.Type.CLOVER));
         notA21Hand.add(new Card(9, Card.Type.CLOVER));
 
-        when(scoreCalculator.calculateScore(notA21Hand)).thenReturn(20);
+        when(scoreCalculator.calculateScore(notA21Hand)).thenReturn(A_WINNING_SCORE);
 
         // then
         Assert.assertFalse(gameState.hasBlackjack(notA21Hand));
@@ -70,8 +75,8 @@ public class BlackjackGameStateTest {
         List<Card> aBustingHand = createBustingHand();
         List<Card> aNotBustingHand = createAWinningNotBustingHand();
 
-        when(scoreCalculator.calculateScore(aBustingHand)).thenReturn(30);
-        when(scoreCalculator.calculateScore(aNotBustingHand)).thenReturn(20);
+        when(scoreCalculator.calculateScore(aBustingHand)).thenReturn(A_BUSTING_SCORE);
+        when(scoreCalculator.calculateScore(aNotBustingHand)).thenReturn(A_WINNING_SCORE);
 
         // then
         Assert.assertFalse(gameState.playerBeatsHouse(aBustingHand, aNotBustingHand));
@@ -83,8 +88,8 @@ public class BlackjackGameStateTest {
         List<Card> aWinningHand = createAWinningNotBustingHand();
         List<Card> aLoosingHand = createALosingNotBustingHand();
 
-        when(scoreCalculator.calculateScore(aWinningHand)).thenReturn(20);
-        when(scoreCalculator.calculateScore(aLoosingHand)).thenReturn(4);
+        when(scoreCalculator.calculateScore(aWinningHand)).thenReturn(A_WINNING_SCORE);
+        when(scoreCalculator.calculateScore(aLoosingHand)).thenReturn(A_LOSING_SCORE);
 
         // then
         Assert.assertTrue(gameState.playerBeatsHouse(aWinningHand, aLoosingHand));
@@ -96,8 +101,8 @@ public class BlackjackGameStateTest {
         List<Card> aWinningHand = createAWinningNotBustingHand();
         List<Card> aLoosingHand = createALosingNotBustingHand();
 
-        when(scoreCalculator.calculateScore(aWinningHand)).thenReturn(20);
-        when(scoreCalculator.calculateScore(aLoosingHand)).thenReturn(4);
+        when(scoreCalculator.calculateScore(aWinningHand)).thenReturn(A_WINNING_SCORE);
+        when(scoreCalculator.calculateScore(aLoosingHand)).thenReturn(A_LOSING_SCORE);
 
         // then
         Assert.assertFalse(gameState.playerBeatsHouse(aLoosingHand, aWinningHand));
@@ -109,8 +114,8 @@ public class BlackjackGameStateTest {
         List<Card> aBustingHand = createBustingHand();
         List<Card> aWinningHand = createAWinningNotBustingHand();
 
-        when(scoreCalculator.calculateScore(aBustingHand)).thenReturn(30);
-        when(scoreCalculator.calculateScore(aWinningHand)).thenReturn(20);
+        when(scoreCalculator.calculateScore(aBustingHand)).thenReturn(A_BUSTING_SCORE);
+        when(scoreCalculator.calculateScore(aWinningHand)).thenReturn(A_WINNING_SCORE);
 
         // then
         Assert.assertTrue(gameState.playerBeatsHouse(aWinningHand, aBustingHand));
@@ -121,7 +126,7 @@ public class BlackjackGameStateTest {
         // given
         List<Card> aBustingHand = createBustingHand();
 
-        when(scoreCalculator.calculateScore(aBustingHand)).thenReturn(30);
+        when(scoreCalculator.calculateScore(aBustingHand)).thenReturn(A_BUSTING_SCORE);
 
         // then
         Assert.assertTrue(gameState.hasBusted(aBustingHand));
@@ -132,7 +137,7 @@ public class BlackjackGameStateTest {
         // given
         List<Card> aNotBustingHand = createAWinningNotBustingHand();
 
-        when(scoreCalculator.calculateScore(aNotBustingHand)).thenReturn(20);
+        when(scoreCalculator.calculateScore(aNotBustingHand)).thenReturn(A_WINNING_SCORE);
 
         // then
         Assert.assertFalse(gameState.hasBusted(aNotBustingHand));
@@ -143,7 +148,7 @@ public class BlackjackGameStateTest {
         // given
         List<Card> aNotBustingHand = createAWinningNotBustingHand();
 
-        when(scoreCalculator.calculateScore(aNotBustingHand)).thenReturn(20);
+        when(scoreCalculator.calculateScore(aNotBustingHand)).thenReturn(A_WINNING_SCORE);
 
         // then
         Assert.assertTrue(gameState.playerAndHouseAreEven(aNotBustingHand, aNotBustingHand));
@@ -155,8 +160,9 @@ public class BlackjackGameStateTest {
         List<Card> anotherNotBustingHand = createAWinningNotBustingHand();
         List<Card> aNotBustingHand = createAWinningNotBustingHand();
 
-        when(scoreCalculator.calculateScore(anotherNotBustingHand)).thenReturn(19);
-        when(scoreCalculator.calculateScore(aNotBustingHand)).thenReturn(20);
+        int aDifferentScore = A_WINNING_SCORE - 1;
+        when(scoreCalculator.calculateScore(anotherNotBustingHand)).thenReturn(aDifferentScore);
+        when(scoreCalculator.calculateScore(aNotBustingHand)).thenReturn(A_WINNING_SCORE);
 
         // then
         Assert.assertFalse(gameState.playerAndHouseAreEven(anotherNotBustingHand, aNotBustingHand));
@@ -168,11 +174,37 @@ public class BlackjackGameStateTest {
         List<Card> aBustingHand = createBustingHand();
         List<Card> aNotBustingHand = createAWinningNotBustingHand();
 
-        when(scoreCalculator.calculateScore(aBustingHand)).thenReturn(30);
-        when(scoreCalculator.calculateScore(aNotBustingHand)).thenReturn(30);
+        when(scoreCalculator.calculateScore(aBustingHand)).thenReturn(A_BUSTING_SCORE);
+        when(scoreCalculator.calculateScore(aNotBustingHand)).thenReturn(A_BUSTING_SCORE);
 
         // then
         Assert.assertFalse(gameState.playerAndHouseAreEven(aBustingHand, aNotBustingHand));
+    }
+
+    @Test
+    public void givenTheHouseHasABlackjackAndThePlayerHasA21ButNoBlackjack_thenThePlayerIsNotEvenWithTheHouse() {
+        // given
+        List<Card> a21Hand = createALosingNotBustingHand();
+        List<Card> blackjackHand = createBlackjackHand();
+
+        when(scoreCalculator.calculateScore(a21Hand)).thenReturn(MAXIMUM_VALUE_BEFORE_BUST);
+        when(scoreCalculator.calculateScore(blackjackHand)).thenReturn(MAXIMUM_VALUE_BEFORE_BUST);
+
+        // then
+        Assert.assertFalse(gameState.playerAndHouseAreEven(a21Hand, blackjackHand));
+    }
+
+    @Test
+    public void givenTheHouseAndThePlayerHaveABlackjack_thenThePlayerIsEvenWithTheHouse() {
+        // given
+        List<Card> blackjackHand = createBlackjackHand();
+        List<Card> anotherBlackjackHand = createBlackjackHand();
+
+        when(scoreCalculator.calculateScore(blackjackHand)).thenReturn(MAXIMUM_VALUE_BEFORE_BUST);
+        when(scoreCalculator.calculateScore(anotherBlackjackHand)).thenReturn(MAXIMUM_VALUE_BEFORE_BUST);
+
+        // then
+        Assert.assertTrue(gameState.playerAndHouseAreEven(blackjackHand, anotherBlackjackHand));
     }
 
     private List<Card> createBustingHand() {
@@ -192,6 +224,7 @@ public class BlackjackGameStateTest {
 
     private List<Card> createALosingNotBustingHand() {
         List<Card> aNotBustingHand = new ArrayList<Card>();
+        aNotBustingHand.add(new Card(2, Card.Type.CLOVER));
         aNotBustingHand.add(new Card(2, Card.Type.CLOVER));
         aNotBustingHand.add(new Card(2, Card.Type.CLOVER));
 

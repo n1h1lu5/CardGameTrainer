@@ -41,6 +41,8 @@ public class BlackjackGameState {
 
         if (isScoreOverBustLimit(playerScore)) {
             return false;
+        } else if (hasBlackjack(houseHand) && !hasBlackjack(playerHand)) {
+            return false;
         }
         return playerScore == houseScore;
     }
