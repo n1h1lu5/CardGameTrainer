@@ -138,6 +138,43 @@ public class BlackjackGameStateTest {
         Assert.assertFalse(gameState.hasBusted(aNotBustingHand));
     }
 
+    @Test
+    public void givenThePlayerAndTheHouseHandsHaveTheSameScoreButScoreIsNotOver21_thenBothAreEven() {
+        // given
+        List<Card> aNotBustingHand = createAWinningNotBustingHand();
+
+        when(scoreCalculator.calculateScore(aNotBustingHand)).thenReturn(20);
+
+        // then
+        Assert.assertTrue(gameState.playerAndHouseAreEven(aNotBustingHand, aNotBustingHand));
+    }
+
+    @Test
+    public void givenThePlayerAndTheHouseHandsDoNotHaveTheSameScore_thenBothAreNotEven() {
+        // given
+        List<Card> anotherNotBustingHand = createAWinningNotBustingHand();
+        List<Card> aNotBustingHand = createAWinningNotBustingHand();
+
+        when(scoreCalculator.calculateScore(anotherNotBustingHand)).thenReturn(19);
+        when(scoreCalculator.calculateScore(aNotBustingHand)).thenReturn(20);
+
+        // then
+        Assert.assertFalse(gameState.playerAndHouseAreEven(anotherNotBustingHand, aNotBustingHand));
+    }
+
+    @Test
+    public void givenThePlayerAndTheHouseHasBusted_thenThePlayerAndTheHouseAreNotEven() {
+        // given
+        List<Card> aBustingHand = createBustingHand();
+        List<Card> aNotBustingHand = createAWinningNotBustingHand();
+
+        when(scoreCalculator.calculateScore(aBustingHand)).thenReturn(30);
+        when(scoreCalculator.calculateScore(aNotBustingHand)).thenReturn(30);
+
+        // then
+        Assert.assertFalse(gameState.playerAndHouseAreEven(aBustingHand, aNotBustingHand));
+    }
+
     private List<Card> createBustingHand() {
         List<Card> bustingHand = new ArrayList<Card>();
         bustingHand.add(new Card(10, Card.Type.CLOVER));

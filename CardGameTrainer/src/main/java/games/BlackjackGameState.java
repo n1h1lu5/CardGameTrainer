@@ -35,8 +35,14 @@ public class BlackjackGameState {
         return score == SCORE_BUST_LIMIT && hand.size() == BLACKJACK_HAND_SIZE;
     }
 
-    public boolean playerAndHouseAreEven(List<Card> hand, List<Card> hand2) {
-        return false;
+    public boolean playerAndHouseAreEven(List<Card> playerHand, List<Card> houseHand) {
+        int playerScore = scoreCalculator.calculateScore(playerHand);
+        int houseScore = scoreCalculator.calculateScore(houseHand);
+
+        if (isScoreOverBustLimit(playerScore)) {
+            return false;
+        }
+        return playerScore == houseScore;
     }
 
     private boolean isScoreOverBustLimit(int score) {
