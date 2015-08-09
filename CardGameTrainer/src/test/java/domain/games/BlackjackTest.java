@@ -9,6 +9,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Mockito.*;
+import domain.decks.BlackjackShoe;
 import domain.decks.Card;
 import domain.games.Blackjack;
 import domain.games.BlackjackGameState;
@@ -20,43 +21,35 @@ public class BlackjackTest {
     private static final float BLACKJACK_PAY_FACTOR = 1.5f;
 
     private BlackjackGameState gameState;
+    private BlackjackShoe gameShoe;
     private Player player;
     private House house;
 
     @Before
     public void setup() {
         gameState = mock(BlackjackGameState.class);
+        gameShoe = mock(BlackjackShoe.class);
         player = mock(Player.class);
         house = mock(House.class);
     }
 
     @Test
     public void canCreateABlackjackInstence() {
-        new Blackjack(house, player);
+        new Blackjack(house, player, gameShoe);
     }
 
     @Test
-    public void givenANewPlayWithSinglePlayer_whenItsTheBeginingOfTheGame_thenThePlayerMustGiveHisBetThenReceiveTwoCards() {
-        // given // when
-        startANewSinglePlayerGame();
-
-        // then
-        InOrder order = inOrder(player);
-
-        order.verify(player).decideBet();
-        order.verify(player, times(2)).receiveCard(anyInt());
-    }
-
-    @Test
-    public void givenANewPlayWithSinglePlayer_whenItsTheBeginingOfTheGame_thenThePlayerReceiveHisCardsFirstAndTheHouseReceiveItsCardsLast() {
+    public void givenANewPlayWithSinglePlayer_whenItsTheBeginingOfTheGame_thenThePlayerMustGiveHisBetThenReceiveHisCardsFirstAndTheHouseReceiveItsCardsLast() {
         // given // when
         startANewSinglePlayerGame();
 
         // then
         InOrder order = inOrder(player, house);
 
-        order.verify(player, times(2)).receiveCard(anyInt());
-        order.verify(house, times(2)).receiveCard(anyInt());
+        verify(gameShoe, times(4)).takeCardOnTop();
+        order.verify(player).decideBet();
+        order.verify(player, times(2)).receiveCard(any(Card.class));
+        order.verify(house, times(2)).receiveCard(any(Card.class));
     }
 
     @Test
@@ -71,9 +64,24 @@ public class BlackjackTest {
         blackjack.askHouseToPlay();
 
         // then
-        verify(house, times(5)).receiveCard(anyInt());
+        verify(house, times(5)).receiveCard(any(Card.class));
     }
 
+    @Test
+    public void whenAPlayerOrTheHouseWantANewCard_thenItAlwaysComeFromTheTopOfABlackjackFoe() {
+        // when
+        Blackjack blackjack = startANewSinglePlayerGame();
+        
+        when(house.wantsNewCard()).thenAnswer(stopTakingNewCardsAfter2Times());
+        when(player.wantsANewCard()).thenAnswer(stopTakingNewCardsAfter2Times());
+
+        blackjack.askHouseToPlay();
+        blackjack.askPlayerToPlay();
+        
+        // then
+        verify(gameShoe, times(8)).takeCardOnTop();
+    }
+    
     @Test
     public void givenASinglePlayerGame_whenThePlayerHasPlayed_thenTheHouseCanAskANewCardUntilItDoesNotWantAnyMore() {
         // given
@@ -85,7 +93,7 @@ public class BlackjackTest {
         blackjack.askHouseToPlay();
 
         // then
-        verify(house, times(4)).receiveCard(anyInt());
+        verify(house, times(4)).receiveCard(any(Card.class));
     }
 
     @Test
@@ -99,7 +107,7 @@ public class BlackjackTest {
         blackjack.askPlayerToPlay();
 
         // then
-        verify(player, times(4)).receiveCard(anyInt());
+        verify(player, times(4)).receiveCard(any(Card.class));
     }
 
     @Test
@@ -114,7 +122,7 @@ public class BlackjackTest {
         blackjack.askPlayerToPlay();
 
         // then
-        verify(player, times(5)).receiveCard(anyInt());
+        verify(player, times(5)).receiveCard(any(Card.class));
     }
 
     @Test
@@ -202,8 +210,11 @@ public class BlackjackTest {
     }
 
     private Blackjack startANewSinglePlayerGame() {
-        Blackjack blackjack = new Blackjack(house, player, gameState);
+        Blackjack blackjack = new Blackjack(house, player, gameShoe, gameState);
+        
         when(player.decideBet()).thenReturn(PLAYER_BET);
+        when(gameShoe.takeCardOnTop()).thenReturn(new Card(10, Card.Type.CLOVER));
+        
         blackjack.startNewPlay();
         return blackjack;
     }

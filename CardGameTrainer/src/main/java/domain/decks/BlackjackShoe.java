@@ -1,8 +1,8 @@
 package domain.decks;
 
-public class BlackjackCardDeck {
+public class BlackjackShoe {
 
-    public Card giveCardOnTop() {
+    public Card takeCardOnTop() {
         return new Card(1, Card.Type.CLOVER);
     }
 

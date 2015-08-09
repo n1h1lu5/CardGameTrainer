@@ -13,7 +13,7 @@ public class Player {
         return hand;
     }
 
-    public void receiveCard(int card) {
+    public void receiveCard(Card card) {
     }
 
     public int decideBet() {

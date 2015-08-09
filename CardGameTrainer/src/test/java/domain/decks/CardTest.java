@@ -10,7 +10,7 @@ public class CardTest {
     }
 
     @Test
-    public void aNecessaryCheckInOrderToHave100PercentCodeCoverage_junitStrangeBehavior() {
+    public void aNecessaryCheckInOrderToHave100PercentCodeCoverage_junitStrangeBehaviorRegardingEnums() {
         Card.Type.valueOf("CLOVER");
     }
 }

@@ -16,7 +16,7 @@ public class House {
         return false;
     }
 
-    public void receiveCard(int card) {
+    public void receiveCard(Card card) {
         
     }
 
