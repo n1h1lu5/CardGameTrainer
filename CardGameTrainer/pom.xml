@@ -5,16 +5,31 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>CardGameTrainer</name>
   <description>A program that trains you to play the best move in a card game, according to probabilities.</description>
+  <properties>
+    <powermock.version>1.6.2</powermock.version>
+  </properties>
   <dependencies>
   	<dependency>
   		<groupId>junit</groupId>
   		<artifactId>junit</artifactId>
-  		<version>4.12</version>
+  		<version>4.4</version>
   	</dependency>
   	<dependency>
 		<groupId>org.mockito</groupId>
 		<artifactId>mockito-all</artifactId>
-		<version>1.9.5</version>
+		<version>1.10.19</version>
 	</dependency>
+   <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-module-junit4</artifactId>
+      <version>${powermock.version}</version>
+      <scope>test</scope>
+   </dependency>
+   <dependency>
+      <groupId>org.powermock</groupId>
+      <artifactId>powermock-api-mockito</artifactId>
+      <version>${powermock.version}</version>
+      <scope>test</scope>
+   </dependency>
   </dependencies>
 </project>
