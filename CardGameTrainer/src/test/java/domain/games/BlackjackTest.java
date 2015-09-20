@@ -46,7 +46,7 @@ public class BlackjackTest {
         // then
         InOrder order = inOrder(player, house);
 
-        verify(gameShoe, times(4)).takeCardOnTop();
+        verify(gameShoe, times(4)).giveTopCard();
         order.verify(player).decideBet();
         order.verify(player, times(2)).receiveCard(any(Card.class));
         order.verify(house, times(2)).receiveCard(any(Card.class));
@@ -79,7 +79,7 @@ public class BlackjackTest {
         blackjack.askPlayerToPlay();
         
         // then
-        verify(gameShoe, times(8)).takeCardOnTop();
+        verify(gameShoe, times(8)).giveTopCard();
     }
     
     @Test
@@ -139,7 +139,7 @@ public class BlackjackTest {
         ArgumentCaptor<Integer> losingBetArgument = ArgumentCaptor.forClass(Integer.class);
 
         verify(player).loseBet(losingBetArgument.capture());
-        Assert.assertEquals((int) (PLAYER_BET), losingBetArgument.getValue().intValue());
+        Assert.assertEquals((PLAYER_BET), losingBetArgument.getValue().intValue());
     }
 
     @Test
@@ -213,7 +213,7 @@ public class BlackjackTest {
         Blackjack blackjack = new Blackjack(house, player, gameShoe, gameState);
         
         when(player.decideBet()).thenReturn(PLAYER_BET);
-        when(gameShoe.takeCardOnTop()).thenReturn(new Card(10, Card.Type.CLOVER));
+        when(gameShoe.giveTopCard()).thenReturn(new Card(Card.Value.TEN, Card.Type.CLUB));
         
         blackjack.startNewPlay();
         return blackjack;
@@ -223,7 +223,6 @@ public class BlackjackTest {
         return new Answer<Boolean>() {
             private int numberOfTimeTheHandIsCalculated = 0;
 
-            @Override
             public Boolean answer(InvocationOnMock invocation) throws Throwable {
                 numberOfTimeTheHandIsCalculated++;
                 if (numberOfTimeTheHandIsCalculated < 3)
@@ -237,7 +236,6 @@ public class BlackjackTest {
         return new Answer<Boolean>() {
             private int numberOfTimeTheHandIsCalculated = 0;
 
-            @Override
             public Boolean answer(InvocationOnMock invocation) throws Throwable {
                 numberOfTimeTheHandIsCalculated++;
                 if (numberOfTimeTheHandIsCalculated < 4)

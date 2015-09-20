@@ -48,9 +48,9 @@ public class BlackjackGameStateTest {
     public void givenThenHandScoreIs21AndIsMadeOfMoreThan2Cards_thenThisIsNotABlackjack() {
         // given
         List<Card> a21Hand = new ArrayList<Card>();
-        a21Hand.add(new Card(1, Card.Type.CLOVER));
-        a21Hand.add(new Card(1, Card.Type.CLOVER));
-        a21Hand.add(new Card(9, Card.Type.CLOVER));
+        a21Hand.add(new Card(Card.Value.ACE, Card.Type.CLUB));
+        a21Hand.add(new Card(Card.Value.ACE, Card.Type.CLUB));
+        a21Hand.add(new Card(Card.Value.NINE, Card.Type.CLUB));
 
         when(scoreCalculator.calculateScore(a21Hand)).thenReturn(MAXIMUM_VALUE_BEFORE_BUST);
 
@@ -62,8 +62,8 @@ public class BlackjackGameStateTest {
     public void givenThenHandScoreIsNot21_thenThisIsNotABlackjack() {
         // given
         List<Card> notA21Hand = new ArrayList<Card>();
-        notA21Hand.add(new Card(1, Card.Type.CLOVER));
-        notA21Hand.add(new Card(9, Card.Type.CLOVER));
+        notA21Hand.add(new Card(Card.Value.ACE, Card.Type.CLUB));
+        notA21Hand.add(new Card(Card.Value.NINE, Card.Type.CLUB));
 
         when(scoreCalculator.calculateScore(notA21Hand)).thenReturn(A_WINNING_SCORE);
 
@@ -159,12 +159,12 @@ public class BlackjackGameStateTest {
     @Test
     public void givenThePlayerAndTheHouseHandsDoNotHaveTheSameScore_thenBothAreNotEven() {
         // given
+        List<Card> aNotBustingHand = createALosingNotBustingHand();
         List<Card> anotherNotBustingHand = createAWinningNotBustingHand();
-        List<Card> aNotBustingHand = createAWinningNotBustingHand();
 
-        int aDifferentScore = A_WINNING_SCORE - 1;
-        when(scoreCalculator.calculateScore(anotherNotBustingHand)).thenReturn(aDifferentScore);
+        int aLowerScore = A_WINNING_SCORE - 1;
         when(scoreCalculator.calculateScore(aNotBustingHand)).thenReturn(A_WINNING_SCORE);
+        when(scoreCalculator.calculateScore(anotherNotBustingHand)).thenReturn(aLowerScore);
 
         // then
         Assert.assertFalse(gameState.playerAndHouseAreEven(anotherNotBustingHand, aNotBustingHand));
@@ -211,32 +211,32 @@ public class BlackjackGameStateTest {
 
     private List<Card> createBustingHand() {
         List<Card> bustingHand = new ArrayList<Card>();
-        bustingHand.add(new Card(10, Card.Type.CLOVER));
-        bustingHand.add(new Card(10, Card.Type.CLOVER));
-        bustingHand.add(new Card(10, Card.Type.CLOVER));
+        bustingHand.add(new Card(Card.Value.TEN, Card.Type.CLUB));
+        bustingHand.add(new Card(Card.Value.TEN, Card.Type.CLUB));
+        bustingHand.add(new Card(Card.Value.TEN, Card.Type.CLUB));
         return bustingHand;
     }
 
     private List<Card> createAWinningNotBustingHand() {
         List<Card> aNotBustingHand = new ArrayList<Card>();
-        aNotBustingHand.add(new Card(10, Card.Type.CLOVER));
-        aNotBustingHand.add(new Card(10, Card.Type.CLOVER));
+        aNotBustingHand.add(new Card(Card.Value.TEN, Card.Type.CLUB));
+        aNotBustingHand.add(new Card(Card.Value.TEN, Card.Type.CLUB));
         return aNotBustingHand;
     }
 
     private List<Card> createALosingNotBustingHand() {
         List<Card> aNotBustingHand = new ArrayList<Card>();
-        aNotBustingHand.add(new Card(2, Card.Type.CLOVER));
-        aNotBustingHand.add(new Card(2, Card.Type.CLOVER));
-        aNotBustingHand.add(new Card(2, Card.Type.CLOVER));
+        aNotBustingHand.add(new Card(Card.Value.TWO, Card.Type.CLUB));
+        aNotBustingHand.add(new Card(Card.Value.TWO, Card.Type.CLUB));
+        aNotBustingHand.add(new Card(Card.Value.TWO, Card.Type.CLUB));
 
         return aNotBustingHand;
     }
 
     private List<Card> createBlackjackHand() {
         List<Card> blackjackHand = new ArrayList<Card>();
-        blackjackHand.add(new Card(1, Card.Type.CLOVER));
-        blackjackHand.add(new Card(10, Card.Type.CLOVER));
+        blackjackHand.add(new Card(Card.Value.ACE, Card.Type.CLUB));
+        blackjackHand.add(new Card(Card.Value.TEN, Card.Type.CLUB));
         return blackjackHand;
     }
 }

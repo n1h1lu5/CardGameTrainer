@@ -13,13 +13,21 @@ public class BlackjackScoreCalculator {
         List<Card> aces = transfertAcesFromHandToAceList(hand);
         
         for (Card card : hand)
-            score += card.number;
+            score += getCardScore(card);
         
         if (aces.size() != 0) {
             score += calculateAcesScore(aces, score);
         }
         
         return score;
+    }
+    
+    private int getCardScore(Card card) {
+        if(card.value.ordinal() > 0 && card.value.ordinal() < 9) {
+            return card.value.ordinal() + 1;
+        } else {
+            return 10;
+        }
     }
     
     private int calculateAcesScore(List<Card> aces, final int score) {
@@ -51,7 +59,7 @@ public class BlackjackScoreCalculator {
         List<Card> aces = new ArrayList<Card>();
 
         for (Card card : hand) {
-            if (card.number == 1)
+            if (card.value == Card.Value.ACE)
                 aces.add(card);
         }
         for (Card ace : aces)

@@ -19,7 +19,6 @@ public class Blackjack {
         this.gameShoe = gameShoe;
         this.player = player;
         this.house = house;
-        
         this.gameState = new BlackjackGameState();
     }
 
@@ -31,13 +30,13 @@ public class Blackjack {
 
     public void askPlayerToPlay() {
         while (!gameState.hasBusted(player.getHand()) && player.wantsANewCard()) {
-            player.receiveCard(gameShoe.takeCardOnTop());
+            player.receiveCard(gameShoe.giveTopCard());
         }
     }
 
     public void askHouseToPlay() {
         while (!gameState.hasBusted(house.getHand()) && house.wantsNewCard()) {
-            house.receiveCard(gameShoe.takeCardOnTop());
+            house.receiveCard(gameShoe.giveTopCard());
         }
     }
 
@@ -55,13 +54,13 @@ public class Blackjack {
     }
 
     private void giveInitialCardsToPlayer() {
-        player.receiveCard(gameShoe.takeCardOnTop());
-        player.receiveCard(gameShoe.takeCardOnTop());
+        player.receiveCard(gameShoe.giveTopCard());
+        player.receiveCard(gameShoe.giveTopCard());
     }
 
     private void giveInitialCardsToHouse() {
-        house.receiveCard(gameShoe.takeCardOnTop());
-        house.receiveCard(gameShoe.takeCardOnTop());
+        house.receiveCard(gameShoe.giveTopCard());
+        house.receiveCard(gameShoe.giveTopCard());
     }
 
     // For test purpose only
