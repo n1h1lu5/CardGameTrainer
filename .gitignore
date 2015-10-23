@@ -2,3 +2,4 @@
 .swp
 .metadata/
 *.class
+.DS_Store
