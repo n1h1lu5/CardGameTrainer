@@ -3,3 +3,4 @@
 .metadata/
 *.class
 *.DS_Store
+out/
