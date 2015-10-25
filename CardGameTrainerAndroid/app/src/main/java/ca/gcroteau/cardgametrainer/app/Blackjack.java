@@ -3,6 +3,8 @@ package ca.gcroteau.cardgametrainer.app;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
+import domain.participant.Player;
 
 public class Blackjack extends Activity{
 
@@ -19,5 +21,10 @@ public class Blackjack extends Activity{
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
+        Player p = new Player();
+
+        TextView tv = (TextView)findViewById(R.id.textView);
+        tv.setText(tv.getText().toString() + p.decideBet());
     }
 }

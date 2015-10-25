@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="cardgametrainercore">
+    <output-path>$PROJECT_DIR$/out/artifacts/cardgametrainercore</output-path>
+    <root id="archive" name="cardgametrainercore.jar">
+      <element id="module-output" name="CardGameTrainer" />
+    </root>
+  </artifact>
+</component>
