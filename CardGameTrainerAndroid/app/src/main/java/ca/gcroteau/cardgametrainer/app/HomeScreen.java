@@ -22,12 +22,13 @@ public class HomeScreen extends Activity {
     }
 
     public void startBlackjack(View view) {
-        Intent intent = new Intent(this, Blackjack.class);
+        Intent intent = new Intent(this, BlackjackScreen.class);
         startActivity(intent);
     }
 
     public void displayAbout(View view) {
-
+        Intent intent = new Intent(this, AboutScreen.class);
+        startActivity(intent);
     }
 
 }

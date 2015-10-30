@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".Blackjack"
+                android:name=".BlackjackScreen"
                 android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
                 android:screenOrientation="landscape">
         </activity>
