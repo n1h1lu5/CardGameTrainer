@@ -17,17 +17,12 @@ public class EndPlayState extends BlackjackGameState {
     private void computeOutcome(BlackjackGame blackjackGame) {
         if (gameState.playerAndHouseAreEven(blackjackGame.getPlayerHand(), blackjackGame.getHouseHand())) {
             blackjackGame.givePlayerEvenGains();
-            //player.receiveGains(0);
         } else if (gameState.hasBlackjack(blackjackGame.getPlayerHand())) {
             blackjackGame.givePlayerBlackjackGains();
-            //int gain = (int) (playerBet * BLACKJACK_PAY_FACTOR);
-            //player.receiveGains(gain);
         } else if (gameState.playerBeatsHouse(blackjackGame.getPlayerHand(), blackjackGame.getHouseHand())) {
             blackjackGame.givePlayerStandardGains();
-            //player.receiveGains(playerBet);
         } else {
             blackjackGame.takePlayerBet();
-            //player.loseBet(playerBet);
         }
     }
 
