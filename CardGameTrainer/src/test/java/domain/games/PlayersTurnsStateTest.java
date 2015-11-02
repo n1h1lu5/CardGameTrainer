@@ -13,12 +13,10 @@ import static org.mockito.Mockito.mock;
 
 public class PlayersTurnsStateTest {
 
-    private BlackjackGameState1 gameState; // This temp class will go extinct
     private BlackjackGame blackjackGame;
 
     @Before
     public void setup() {
-        gameState = mock(BlackjackGameState1.class);
         blackjackGame = mock(BlackjackGame.class);
     }
 
@@ -40,11 +38,11 @@ public class PlayersTurnsStateTest {
     @Test
     public void givenItIsThePlayerTurnToHaveNewCards_thenHeCanAskForANewCardUntilHeHasBusted() {
         // given
-        PlayersTurnState playersTurnState = new PlayersTurnState(gameState);
+        PlayersTurnState playersTurnState = new PlayersTurnState();
 
         // when
         //when(player.wantsANewCard()).thenReturn(true);
-        when(gameState.hasBusted(anyListOf(Card.class))).thenAnswer(bustAfterTakingNewCards3Times());
+        when(blackjackGame.hasBusted(anyListOf(Card.class))).thenAnswer(bustAfterTakingNewCards3Times());
 
         playersTurnState.update(blackjackGame);
 

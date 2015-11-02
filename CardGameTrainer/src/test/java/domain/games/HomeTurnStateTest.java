@@ -12,24 +12,21 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.mock;
 
 public class HomeTurnStateTest {
-
-    private BlackjackGameState1 gameState; // This temp class will go extinct
     private BlackjackGame blackjackGame;
 
     @Before
     public void setup() {
-        gameState = mock(BlackjackGameState1.class);
         blackjackGame = mock(BlackjackGame.class);
     }
 
     @Test
     public void givenASinglePlayerGame_whenThePlayerHasPlayed_thenTheHouseCanAskANewCardUntilItBusts() {
         // given
-        HomeTurnState homeTurnState = new HomeTurnState(gameState);
+        HomeTurnState homeTurnState = new HomeTurnState();
 
         // when
         //when(player.wantsANewCard()).thenReturn(true);
-        when(gameState.hasBusted(anyListOf(Card.class))).thenAnswer(bustAfterTakingNewCards3Times());
+        when(blackjackGame.hasBusted(anyListOf(Card.class))).thenAnswer(bustAfterTakingNewCards3Times());
 
         homeTurnState.update(blackjackGame);
 

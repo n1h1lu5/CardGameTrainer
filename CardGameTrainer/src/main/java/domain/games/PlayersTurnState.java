@@ -2,10 +2,7 @@ package domain.games;
 
 public class PlayersTurnState extends BlackjackGameState {
 
-    private BlackjackGameState1 gameState;
-
     public PlayersTurnState() {
-        gameState = new BlackjackGameState1();
         nextState = new HomeTurnState();
     }
 
@@ -18,15 +15,10 @@ public class PlayersTurnState extends BlackjackGameState {
     }
 
     private void askPlayerToPlay(BlackjackGame blackjackGame) {
-        while (!gameState.hasBusted(blackjackGame.getPlayerHand())/* && player.wantsANewCard()*/) {
+        while (!blackjackGame.hasBusted(blackjackGame.getPlayerHand())/* && player.wantsANewCard()*/) {
             // TODO: Will be re-added when player becomes a state object
             blackjackGame.givePlayerACard();
         }
     }
 
-    // For tests purpose only
-    protected PlayersTurnState(BlackjackGameState1 state) {
-        gameState = state;
-        nextState = new HomeTurnState();
-    }
 }

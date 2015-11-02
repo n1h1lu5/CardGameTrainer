@@ -1,8 +1,11 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="cardgametrainercore">
-    <output-path>$PROJECT_DIR$/out/artifacts/cardgametrainercore</output-path>
-    <root id="archive" name="cardgametrainercore.jar">
+    <output-path>$PROJECT_DIR$/out</output-path>
+    <root id="archive" name="CardGameTrainer.jar">
       <element id="module-output" name="CardGameTrainer" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/hamcrest/hamcrest-all/1.3/hamcrest-all-1.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/junit/junit/4.4/junit-4.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/mockito/mockito-all/1.10.19/mockito-all-1.10.19.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
