@@ -26,7 +26,7 @@ public class HomeTurnStateTest {
 
         // when
         //when(player.wantsANewCard()).thenReturn(true);
-        when(blackjackGame.hasBusted(anyListOf(Card.class))).thenAnswer(bustAfterTakingNewCards3Times());
+        when(blackjackGame.hasPlayerBusted()).thenAnswer(bustAfterTakingNewCards3Times());
 
         homeTurnState.update(blackjackGame);
 

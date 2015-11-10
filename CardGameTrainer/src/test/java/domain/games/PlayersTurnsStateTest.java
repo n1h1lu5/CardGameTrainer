@@ -42,7 +42,7 @@ public class PlayersTurnsStateTest {
 
         // when
         //when(player.wantsANewCard()).thenReturn(true);
-        when(blackjackGame.hasBusted(anyListOf(Card.class))).thenAnswer(bustAfterTakingNewCards3Times());
+        when(blackjackGame.hasPlayerBusted()).thenAnswer(bustAfterTakingNewCards3Times());
 
         playersTurnState.update(blackjackGame);
 

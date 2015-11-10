@@ -10,7 +10,7 @@ public class BlackjackScoreCalculator {
 
     public int calculateScore(List<Card> hand) {
         int score = 0;
-        List<Card> aces = transfertAcesFromHandToAceList(hand);
+        List<Card> aces = transferAcesFromHandToAceList(hand);
         
         for (Card card : hand)
             score += getCardScore(card);
@@ -55,7 +55,7 @@ public class BlackjackScoreCalculator {
         return aces.size();
     }
 
-    private List<Card> transfertAcesFromHandToAceList(List<Card> hand) {
+    private List<Card> transferAcesFromHandToAceList(List<Card> hand) {
         List<Card> aces = new ArrayList<Card>();
 
         for (Card card : hand) {

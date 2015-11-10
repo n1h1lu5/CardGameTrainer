@@ -13,8 +13,9 @@ public class HomeTurnState extends BlackjackGameState {
     }
 
     private void askHouseToPlay(BlackjackGame blackjackGame) {
-        while (!blackjackGame.hasBusted(blackjackGame.getHouseHand()) /* && house.wantsNewCard()*/) {
+        while (!blackjackGame.hasPlayerBusted() /* && house.wantsNewCard()*/) {
             // TODO: Will be re-added when home becomes a state object
+            // TODO: Will change for hasHouseBusted, or house is exactly the same as a player, execpt for the AI
             blackjackGame.giveHouseACard();
             //house.receiveCard(gameShoe.giveTopCard());
         }
