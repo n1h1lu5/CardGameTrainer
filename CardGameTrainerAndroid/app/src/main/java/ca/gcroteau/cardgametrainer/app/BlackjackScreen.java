@@ -2,6 +2,7 @@ package ca.gcroteau.cardgametrainer.app;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.SurfaceView;
 import android.view.View;
 import domain.games.BlackjackGame;
 import domain.participant.BlackjackPlayer;
@@ -13,25 +14,7 @@ public class BlackjackScreen extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_blackjack_screen);
-
-        View blackjackScreen = findViewById(R.id.blackjack_screen);
-        blackjackScreen.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-
-        BlackjackPlayer p = new BlackjackPlayer(new Player());
-        BlackjackGame g = new BlackjackGame(p);
-
-        for(int i = 0; i < 6; i++) {
-            g.update();
-        }
-        // TODO: update loop that dont depends on the processor speed
-        /*while(true) {
-            g.update();
-        }*/
+        SurfaceView gameView = new BlackjackView(this);
+        setContentView(gameView);
     }
 }
