@@ -5,6 +5,7 @@ import domain.participant.BlackjackPlayer;
 import domain.participant.Player;
 
 public class BlackjackGameLoop implements Runnable {
+    private static final int MS_FOR_30FPS = 33;
 
     @Override
     public void run() {
@@ -13,13 +14,14 @@ public class BlackjackGameLoop implements Runnable {
 
         while(true) {
             g.update();
+
             delay();
         }
     }
 
     private void delay() {
         try {
-            Thread.sleep(33);
+            Thread.sleep(MS_FOR_30FPS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
