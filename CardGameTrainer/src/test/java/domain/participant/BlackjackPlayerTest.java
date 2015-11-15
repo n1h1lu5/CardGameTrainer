@@ -1,5 +1,6 @@
 package domain.participant;
 
+import domain.decks.Card;
 import domain.games.BlackjackScoreCalculator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -7,6 +8,7 @@ import org.junit.Test;
 
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class BlackjackPlayerTest {
@@ -35,7 +37,7 @@ public class BlackjackPlayerTest {
 
     @Test
     public void whenTheScoreCalculatorReturnsABustingScore_thenTheHandHasBusted() {
-        // given //when
+        // given // when
         when(scoreCalculator.calculateScore(anyList())).thenReturn(A_BUSTING_SCORE);
 
         // then
@@ -49,6 +51,16 @@ public class BlackjackPlayerTest {
 
         // then
         Assert.assertFalse(aBlackjackPlayer.hasBusted());
+    }
+
+    @Test
+    public void givenTheBlackjackPlayerReceivesACard_thenTheCardIsAddedToTheHand() {
+        // given // when
+        Card aCard = new Card(Card.Value.ACE, Card.Type.CLUB);
+        aBlackjackPlayer.receiveCard(aCard);
+
+        // then
+        verify(aPlayer).addCardToHand(aCard);
     }
 
     /* // Can be used in the score calculator?

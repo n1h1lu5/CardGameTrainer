@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import domain.games.BlackjackGame;
+import domain.participant.BlackjackPlayer;
+import domain.participant.Player;
 
 public class BlackjackScreen extends Activity {
 
@@ -21,10 +23,15 @@ public class BlackjackScreen extends Activity {
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
-        BlackjackGame g = new BlackjackGame();
+        BlackjackPlayer p = new BlackjackPlayer(new Player());
+        BlackjackGame g = new BlackjackGame(p);
 
-        while(true) {
+        for(int i = 0; i < 6; i++) {
             g.update();
         }
+        // TODO: update loop that dont depends on the processor speed
+        /*while(true) {
+            g.update();
+        }*/
     }
 }

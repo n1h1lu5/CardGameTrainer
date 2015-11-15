@@ -1,5 +1,6 @@
 package domain.participant;
 
+import domain.decks.Card;
 import domain.games.BlackjackScoreCalculator;
 
 public class BlackjackPlayer {
@@ -14,8 +15,12 @@ public class BlackjackPlayer {
     }
 
     public boolean hasBusted() {
-        int score = scoreCalculator.calculateScore(player.hand);
+        int score = scoreCalculator.calculateScore(player.getHand());
         return isScoreOverBustLimit(score);
+    }
+
+    public void receiveCard(Card aCard) {
+        this.player.addCardToHand(aCard);
     }
 
     private boolean isScoreOverBustLimit(int score) {

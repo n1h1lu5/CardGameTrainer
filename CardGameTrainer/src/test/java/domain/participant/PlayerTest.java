@@ -14,7 +14,7 @@ public class PlayerTest {
         Player aPlayer = new Player();
 
         // then
-        assertEquals(aPlayer.hand.size(), 0);
+        assertEquals(aPlayer.getHand().size(), 0);
     }
 
     @Test
@@ -24,8 +24,8 @@ public class PlayerTest {
         Card aCard = new Card(Card.Value.ACE, Card.Type.CLUB);
 
         // then
-        aPlayer.hand.add(aCard);
-        Card cardInTheHand = aPlayer.hand.get(0);
+        aPlayer.addCardToHand(aCard);
+        Card cardInTheHand = aPlayer.getHand().get(0);
 
         assertEquals(cardInTheHand, aCard);
     }

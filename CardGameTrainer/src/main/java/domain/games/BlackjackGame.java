@@ -1,6 +1,8 @@
 package domain.games;
 
+import domain.decks.BlackjackShoe;
 import domain.decks.Card;
+import domain.decks.CardDeckBuilder;
 import domain.participant.BlackjackPlayer;
 
 import java.util.ArrayList;
@@ -8,11 +10,13 @@ import java.util.List;
 
 public class BlackjackGame {
     private BlackjackPlayer player;
+    private BlackjackShoe shoe;
     private BlackjackGameState currentGameState;
 
     public BlackjackGame(BlackjackPlayer player) {
         this.player = player;
         currentGameState = new StartGameState();
+        shoe = new BlackjackShoe(1, new CardDeckBuilder());
     }
 
     public void update() {
@@ -53,7 +57,7 @@ public class BlackjackGame {
     }
 
     public void givePlayerACard() {
-
+        this.player.receiveCard(this.shoe.giveTopCard());
     }
 
     public void giveHouseACard() {
@@ -61,8 +65,9 @@ public class BlackjackGame {
     }
 
     // For test purpose only
-    protected BlackjackGame(BlackjackPlayer player, BlackjackGameState currentGameState) {
+    protected BlackjackGame(BlackjackPlayer player, BlackjackShoe blackjackShoe, BlackjackGameState currentGameState) {
         this.player = player;
+        this.shoe = blackjackShoe;
         this.currentGameState = currentGameState;
     }
 }

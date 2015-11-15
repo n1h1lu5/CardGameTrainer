@@ -3,7 +3,8 @@ package domain.games;
 public class PlayersTurnState extends BlackjackGameState {
 
     public PlayersTurnState() {
-        nextState = new HomeTurnState();
+        //nextState = new HomeTurnState();
+        nextState = new EndPlayState();
     }
 
     @Override

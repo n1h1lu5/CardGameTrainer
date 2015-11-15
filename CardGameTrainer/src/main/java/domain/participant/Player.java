@@ -6,9 +6,17 @@ import java.util.List;
 import domain.decks.Card;
 
 public class Player {
-    public List<Card> hand;
+    private List<Card> hand;
 
     public Player() {
         hand = new ArrayList<Card>();
+    }
+
+    public void addCardToHand(Card aCard) {
+        hand.add(aCard);
+    }
+
+    public List<Card> getHand() {
+        return hand;
     }
 }
