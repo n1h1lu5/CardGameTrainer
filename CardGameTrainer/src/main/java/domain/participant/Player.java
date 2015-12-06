@@ -5,11 +5,17 @@ import java.util.List;
 
 import domain.decks.Card;
 
-public class Player {
+public class Player implements PlayerGameEngine, PlayerAI {
+    private boolean wantsACard;
+    private boolean wantsToFinishTurn;
+
     private List<Card> hand;
 
     public Player() {
-        hand = new ArrayList<Card>();
+        this.wantsACard = false;
+        this.wantsToFinishTurn = false;
+
+        this.hand = new ArrayList<Card>();
     }
 
     public void addCardToHand(Card aCard) {
@@ -18,5 +24,30 @@ public class Player {
 
     public List<Card> getHand() {
         return hand;
+    }
+
+    public void askACard() {
+        this.wantsACard = true;
+    }
+
+    public boolean wantsACard() {
+        return this.wantsACard;
+    }
+
+    public void askToFinishTurn() {
+        this.wantsToFinishTurn = true;
+    }
+
+    public boolean wantsToFinishTurn() {
+        return this.wantsToFinishTurn;
+    }
+
+    public void resetStates() {
+        this.wantsACard = false;
+        this.wantsToFinishTurn = false;
+    }
+
+    public void receiveCard(Card aCard) {
+        hand.add(aCard);
     }
 }

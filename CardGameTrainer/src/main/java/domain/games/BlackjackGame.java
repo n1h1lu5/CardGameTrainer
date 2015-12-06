@@ -2,25 +2,27 @@ package domain.games;
 
 import domain.decks.BlackjackShoe;
 import domain.decks.Card;
-import domain.decks.CardDeckBuilder;
-import domain.participant.BlackjackPlayer;
+import domain.participant.PlayerGameEngine;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BlackjackGame {
-    private BlackjackPlayer player;
+    private static final int SCORE_BUST_LIMIT = 21;
+
+    private PlayerGameEngine player;
     private BlackjackShoe shoe;
     private BlackjackGameState currentGameState;
 
-    public BlackjackGame(BlackjackPlayer player) {
+    public BlackjackGame(PlayerGameEngine player, BlackjackShoe shoe, BlackjackGameState currentGameState) {
         this.player = player;
-        currentGameState = new StartGameState();
-        shoe = new BlackjackShoe(1, new CardDeckBuilder());
+        this.currentGameState = currentGameState;
+        this.shoe = shoe;
     }
 
     public void update() {
-        currentGameState.update(this);
+        this.currentGameState.update(this);
+        this.player.resetStates();
     }
 
     public void changeState(BlackjackGameState newState) {
@@ -37,7 +39,12 @@ public class BlackjackGame {
     }
 
     public boolean hasPlayerBusted() {
-        return player.hasBusted();
+        int score = BlackjackScoreCalculator.calculateScore(this.player.getHand());
+        return isScoreOverBustLimit(score);
+    }
+
+    private boolean isScoreOverBustLimit(int score) {
+        return score > SCORE_BUST_LIMIT;
     }
 
     public void givePlayerEvenGains() {
@@ -64,10 +71,11 @@ public class BlackjackGame {
 
     }
 
-    // For test purpose only
-    protected BlackjackGame(BlackjackPlayer player, BlackjackShoe blackjackShoe, BlackjackGameState currentGameState) {
-        this.player = player;
-        this.shoe = blackjackShoe;
-        this.currentGameState = currentGameState;
+    public boolean currentPlayerWantsCard() {
+        return this.player.wantsACard();
+    }
+
+    public boolean currentPlayerStoppedHisTurn() {
+        return this.player.wantsToFinishTurn();
     }
 }

@@ -15,7 +15,6 @@ public class DistributeCardsState extends BlackjackGameState {
     }
 
     private void startNewPlay(BlackjackGame blackjackGame) {
-        //playerBet = player.decideBet(); //TODO: Move that to take bets state
         giveInitialCardsToPlayer(blackjackGame);
         giveInitialCardsToHouse(blackjackGame);
     }

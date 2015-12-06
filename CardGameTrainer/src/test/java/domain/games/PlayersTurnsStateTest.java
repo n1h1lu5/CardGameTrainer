@@ -1,23 +1,73 @@
 package domain.games;
 
-import domain.decks.Card;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.mock;
 
 public class PlayersTurnsStateTest {
-
     private BlackjackGame blackjackGame;
+
+    private PlayersTurnState playersTurnState;
 
     @Before
     public void setup() {
+        playersTurnState = new PlayersTurnState();
         blackjackGame = mock(BlackjackGame.class);
+    }
+
+    @Test
+    public void givenItIsThePlayerTurnToHaveNewCards_whenHeHasBusted_thenHisTurnIsFinished() {
+        // given // when
+        when(blackjackGame.hasPlayerBusted()).thenReturn(true);
+
+        playersTurnState.update(blackjackGame);
+
+        // then
+        verify(blackjackGame).changeState(any(EndPlayState.class));
+    }
+
+    @Test
+    public void givenItIsThePlayerTurnToHaveNewCards_whenThePlayerHasNotBustedAndWantsACard_thenHeReceivesACard() {
+        // given // when
+        when(blackjackGame.hasPlayerBusted()).thenReturn(false);
+        when(blackjackGame.currentPlayerWantsCard()).thenReturn(true);
+
+        playersTurnState.update(blackjackGame);
+
+        // then
+        verify(blackjackGame).givePlayerACard();
+    }
+
+    @Test
+    public void givenItIsThePlayerTurnToHaveNewCards_whenThePlayerHasNotBustedAndDoesNotWantACardAndDoesNotFinishHisTurn_thenHeDoesNotReceiveACardButHisTurnIsNotFinished() {
+        // given // when
+        when(blackjackGame.hasPlayerBusted()).thenReturn(false);
+        when(blackjackGame.currentPlayerWantsCard()).thenReturn(false);
+        when(blackjackGame.currentPlayerStoppedHisTurn()).thenReturn(false);
+
+        playersTurnState.update(blackjackGame);
+
+        // then
+        verify(blackjackGame, never()).givePlayerACard();
+        verify(blackjackGame, never()).changeState(any(EndPlayState.class));
+    }
+
+    @Test
+    public void givenItIsThePlayerTurnToHaveNewCards_whenThePlayerStopsItsTurn_thenHisTurnIsFinished() {
+        // given // when
+        when(blackjackGame.hasPlayerBusted()).thenReturn(false);
+        when(blackjackGame.currentPlayerStoppedHisTurn()).thenReturn(true);
+
+        playersTurnState.update(blackjackGame);
+
+        // then
+        verify(blackjackGame, never()).givePlayerACard();
+        verify(blackjackGame).changeState(any(EndPlayState.class));
     }
 
     //TODO: when player becomes a state object
@@ -35,7 +85,7 @@ public class PlayersTurnsStateTest {
         verify(player, times(4)).receiveCard(any(Card.class));
     }*/
 
-    @Test
+    /*@Test
     public void givenItIsThePlayerTurnToHaveNewCards_thenHeCanAskForANewCardUntilHeHasBusted() {
         // given
         PlayersTurnState playersTurnState = new PlayersTurnState();
@@ -48,7 +98,7 @@ public class PlayersTurnsStateTest {
 
         // then
         verify(blackjackGame, times(3)).givePlayerACard();
-    }
+    }*/
 
     // TODO: Test to be moved
     /*@Test

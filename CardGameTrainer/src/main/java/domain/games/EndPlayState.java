@@ -8,11 +8,7 @@ public class EndPlayState extends BlackjackGameState {
     private static final int SCORE_BUST_LIMIT = 21;
     private static final int BLACKJACK_HAND_SIZE = 2;
 
-    private BlackjackScoreCalculator scoreCalculator;
-
-    public EndPlayState() {
-        scoreCalculator = new BlackjackScoreCalculator();
-    }
+//    private BlackjackScoreCalculator scoreCalculator;
 
     @Override
     public void update(BlackjackGame blackjackGame) {
@@ -34,20 +30,20 @@ public class EndPlayState extends BlackjackGameState {
     }
 
     private boolean playerBeatsHouse(List<Card> playerHand, List<Card> houseHand) {
-        int playerScore = scoreCalculator.calculateScore(playerHand);
-        int houseScore = scoreCalculator.calculateScore(houseHand);
+        int playerScore = BlackjackScoreCalculator.calculateScore(playerHand);
+        int houseScore = BlackjackScoreCalculator.calculateScore(houseHand);
 
         return (playerScore <= SCORE_BUST_LIMIT) && ((playerScore > houseScore) || (isScoreOverBustLimit(houseScore)));
     }
 
     private boolean hasBlackjack(List<Card> hand) {
-        int score = scoreCalculator.calculateScore(hand);
+        int score = BlackjackScoreCalculator.calculateScore(hand);
         return score == SCORE_BUST_LIMIT && hand.size() == BLACKJACK_HAND_SIZE;
     }
 
     private boolean playerAndHouseAreEven(List<Card> playerHand, List<Card> houseHand) {
-        int playerScore = scoreCalculator.calculateScore(playerHand);
-        int houseScore = scoreCalculator.calculateScore(houseHand);
+        int playerScore = BlackjackScoreCalculator.calculateScore(playerHand);
+        int houseScore = BlackjackScoreCalculator.calculateScore(houseHand);
 
         if (isScoreOverBustLimit(playerScore)) {
             return false;
@@ -62,7 +58,7 @@ public class EndPlayState extends BlackjackGameState {
     }
 
     // For test purpose only
-    protected EndPlayState(BlackjackScoreCalculator scoreCalculator) {
+    /*protected EndPlayState(BlackjackScoreCalculator scoreCalculator) {
         this.scoreCalculator = scoreCalculator;
-    }
+    }*/
 }

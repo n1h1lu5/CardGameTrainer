@@ -11,14 +11,16 @@ public class PlayersTurnState extends BlackjackGameState {
     public void update(BlackjackGame blackjackGame) {
         System.out.println("state 4");
 
-        askPlayerToPlay(blackjackGame);
-        blackjackGame.changeState(nextState);
+        if (!blackjackGame.hasPlayerBusted())
+            askPlayerToPlay(blackjackGame);
+        else
+            blackjackGame.changeState(nextState);
     }
 
     private void askPlayerToPlay(BlackjackGame blackjackGame) {
-        while (!blackjackGame.hasPlayerBusted()/* && player.wantsANewCard()*/) {
-            // TODO: Will be re-added when player becomes a state object
+        if (blackjackGame.currentPlayerWantsCard())
             blackjackGame.givePlayerACard();
-        }
+        else if (blackjackGame.currentPlayerStoppedHisTurn())
+            blackjackGame.changeState(nextState);
     }
 }

@@ -8,7 +8,7 @@ import domain.decks.Card;
 public class BlackjackScoreCalculator {
     private static final int SCORE_BUST_LIMIT = 21;
 
-    public int calculateScore(List<Card> hand) {
+    public static int calculateScore(List<Card> hand) {
         int score = 0;
         List<Card> aces = transferAcesFromHandToAceList(hand);
         
@@ -22,7 +22,7 @@ public class BlackjackScoreCalculator {
         return score;
     }
     
-    private int getCardScore(Card card) {
+    private static int getCardScore(Card card) {
         if(card.value.ordinal() > 0 && card.value.ordinal() < 9) {
             return card.value.ordinal() + 1;
         } else {
@@ -30,7 +30,7 @@ public class BlackjackScoreCalculator {
         }
     }
     
-    private int calculateAcesScore(List<Card> aces, final int score) {
+    private static int calculateAcesScore(List<Card> aces, final int score) {
         int acesAllOnesScore = calculateAllAcesAsOnes(aces);
         int acesAllOnesButOneScore = calculateAcesAsOnesButOne(aces);
 
@@ -40,7 +40,7 @@ public class BlackjackScoreCalculator {
             return acesAllOnesScore;
     }
 
-    private int calculateAcesAsOnesButOne(List<Card> aces) {
+    private static int calculateAcesAsOnesButOne(List<Card> aces) {
         int acesAllOnesButOne = 0;
         for (int i = 0; i < aces.size(); i++) {
             if (i == 0)
@@ -51,11 +51,11 @@ public class BlackjackScoreCalculator {
         return acesAllOnesButOne;
     }
 
-    private int calculateAllAcesAsOnes(List<Card> aces) {
+    private static int calculateAllAcesAsOnes(List<Card> aces) {
         return aces.size();
     }
 
-    private List<Card> transferAcesFromHandToAceList(List<Card> hand) {
+    private static List<Card> transferAcesFromHandToAceList(List<Card> hand) {
         List<Card> aces = new ArrayList<Card>();
 
         for (Card card : hand) {
