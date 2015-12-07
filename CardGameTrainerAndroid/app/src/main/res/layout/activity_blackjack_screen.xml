@@ -1,16 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#FFFFFF"
-                android:id="@+id/blackjack_screen">
+<LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/blackjack_screen">
 
-    <TextView
+        <SurfaceView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:name="android.app.SurfaceView" android:id="@+id/surfaceView" android:background="#ff0e22ff"/>
+    <LinearLayout
+            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="This is the blackjack area"
-            android:textColor="#000000"
-            android:id="@+id/textView" android:layout_alignParentTop="true" android:layout_centerHorizontal="true"
-            android:layout_marginTop="37dp"/>
-</RelativeLayout>
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:background="#ff32ff2c">
+        <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ask Card"
+                android:onClick="askCard"
+                android:id="@+id/askCard"/>
+    </LinearLayout>
+    <!--<ca.gcroteau.cardgametrainer.app.BlackjackView
+        android:background="#ccc"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:paddingLeft="20dp"
+        android:paddingBottom="40dp"
+        android:id="@+id/blackjackView"/>-->
+
+        <!-- The fragment with the buttons goes here -->
+
+</LinearLayout>
